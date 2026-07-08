@@ -65,7 +65,7 @@
           calc(var(--pad-y) + env(safe-area-inset-bottom, 0px))
           calc(var(--pad-x) + env(safe-area-inset-left, 0px));
         position: relative;
-        z-index: 1;
+        z-index: 3;
         pointer-events: none;
       }
 
@@ -115,16 +115,19 @@
         flex-direction: column;
         align-items: center;
         gap: 0.05em;
+        pointer-events: auto;
+        cursor: default;
       }
 
       .word {
         display: inline-flex;
-        overflow: hidden;
+        overflow: visible;
       }
 
       .char {
         display: inline-block;
         opacity: 0;
+        color: var(--ink);
         animation: in 0.5s ease calc(0.2s + var(--i) * 0.05s) forwards;
       }
 
@@ -193,8 +196,8 @@
         position: absolute;
         left: var(--x);
         top: var(--y);
-        width: 4.5rem;
-        height: 4.5rem;
+        width: 7.25rem;
+        height: 7.25rem;
         padding: 0;
         border: 0;
         background: transparent;
@@ -206,7 +209,7 @@
 
       .spot.is-live {
         pointer-events: auto;
-        animation: spot-in 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        animation: spot-in 0.28s cubic-bezier(0.22, 1, 0.36, 1) forwards;
       }
 
       .spot__hint {
@@ -214,17 +217,79 @@
         inset: 0;
         display: grid;
         place-items: center;
-        font-size: 0.68rem;
+        font-size: 0;
         line-height: 1;
-        color: var(--green);
+        color: transparent;
         opacity: 0;
-        transition: opacity 0.2s ease;
-        text-shadow: 0 0 12px rgba(78, 207, 142, 0.35);
+        isolation: isolate;
+        transition: opacity 0.35s ease, visibility 0.35s ease;
+      }
+
+      .spot__hint::before {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 2.85rem;
+        height: 2.85rem;
+        transform: translate(-50%, -50%) scale(0.9);
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(120, 255, 190, 0.22) 0%,
+          rgba(78, 207, 142, 0.12) 36%,
+          rgba(78, 207, 142, 0.05) 58%,
+          transparent 74%
+        );
+        opacity: 0.22;
+        filter: blur(8px);
+        transition: opacity 0.6s ease, transform 0.6s ease, filter 0.6s ease;
+        pointer-events: none;
+      }
+
+      .spot__hint::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 0.38rem;
+        height: 0.38rem;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, rgba(180, 240, 210, 0.55) 42%, rgba(78, 207, 142, 0.35) 72%, transparent 100%);
+        box-shadow:
+          0 0 8px rgba(170, 255, 210, 0.35),
+          0 0 18px rgba(78, 207, 142, 0.2);
+        opacity: 0.4;
+        transition: opacity 0.6s ease, transform 0.6s ease, box-shadow 0.6s ease;
+        pointer-events: none;
       }
 
       .spot.is-live .spot__hint {
-        opacity: 0.2;
-        animation: spot-pulse 2.4s ease-in-out infinite;
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .spot.is-glow .spot__hint::before {
+        opacity: 0.38;
+        transform: translate(-50%, -50%) scale(1.12);
+        filter: blur(9px);
+      }
+
+      .spot.is-glow .spot__hint::after {
+        opacity: 0.62;
+        transform: translate(-50%, -50%) scale(1.18);
+        box-shadow:
+          0 0 10px rgba(200, 255, 225, 0.45),
+          0 0 22px rgba(120, 255, 190, 0.28),
+          0 0 36px rgba(78, 207, 142, 0.14);
+      }
+
+      .secrets.is-ready .spot.is-live:hover .spot__hint,
+      .secrets.is-ready .spot.is-live:focus-visible .spot__hint,
+      .secrets.is-ready .spot.is-live.is-open .spot__hint {
+        opacity: 0;
+        visibility: hidden;
       }
 
       .spot__data {
@@ -232,14 +297,14 @@
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);
-        font-size: clamp(0.58rem, 1.6vw, 0.68rem);
+        font-size: clamp(0.65rem, 1.85vw, 0.78rem);
         font-weight: 400;
         line-height: 1.4;
         color: var(--green);
         white-space: nowrap;
         opacity: 0;
         pointer-events: none;
-        transition: opacity 0.2s ease, transform 0.2s ease;
+        transition: opacity 0.45s ease, transform 0.45s ease;
         text-shadow: 0 0 24px rgba(78, 207, 142, 0.45);
         z-index: 1;
       }
@@ -249,15 +314,14 @@
         opacity: 0.65;
       }
 
-      .spot.is-live:hover .spot__hint,
-      .spot.is-live:focus-visible .spot__hint,
-      .spot.is-live.is-open .spot__hint {
-        opacity: 0.5;
+      .secrets.is-intro .spot.is-live .spot__data {
+        opacity: 1;
+        transform: translate(-50%, calc(-50% - 0.2rem));
       }
 
-      .spot.is-live:hover .spot__data,
-      .spot.is-live:focus-visible .spot__data,
-      .spot.is-live.is-open .spot__data {
+      .secrets.is-ready .spot.is-live:hover .spot__data,
+      .secrets.is-ready .spot.is-live:focus-visible .spot__data,
+      .secrets.is-ready .spot.is-live.is-open .spot__data {
         opacity: 1;
         transform: translate(-50%, calc(-50% - 0.2rem));
       }
@@ -285,18 +349,6 @@
         100% {
           opacity: 1;
           transform: translate(-50%, -50%) scale(1);
-        }
-      }
-
-      @keyframes spot-pulse {
-        0%,
-        100% {
-          opacity: 0.12;
-          transform: scale(1);
-        }
-        50% {
-          opacity: 0.4;
-          transform: scale(1.25);
         }
       }
 
@@ -361,6 +413,13 @@
           opacity: 1;
           transform: none;
           filter: none;
+          color: var(--ink);
+          background: none;
+        }
+
+        h1.is-glow .char {
+          color: var(--ink);
+          background: none;
         }
 
         .role.is-blurred {
@@ -462,6 +521,55 @@
         word.appendChild(frag);
       });
 
+      function setupNameGlow() {
+        const h1 = document.querySelector("h1");
+        if (!h1) return;
+        if (matchMedia("(hover: none), (pointer: coarse)").matches) return;
+
+        const chars = () => [...h1.querySelectorAll(".char")];
+
+        const resetChar = (char) => {
+          char.style.color = "";
+          char.style.textShadow = "";
+        };
+
+        const paint = (mx, my) => {
+          chars().forEach((char) => {
+            const rect = char.getBoundingClientRect();
+            const cx = rect.left + rect.width / 2;
+            const cy = rect.top + rect.height / 2;
+            const d = Math.hypot(mx - cx, my - cy);
+            const t = Math.max(0, 1 - d / 88);
+
+            if (t < 0.1) {
+              resetChar(char);
+              return;
+            }
+
+            const hot = Math.min(1, t * 1.35);
+            const r = Math.round(221 + (255 - 221) * hot);
+            const g = Math.round(235 + (255 - 235) * hot);
+            const b = Math.round(227 + (200 - 227) * hot);
+            char.style.color = `rgb(${r}, ${g}, ${b})`;
+            char.style.textShadow = `0 0 ${10 * hot}px rgba(120, 255, 190, ${0.55 * hot}), 0 0 ${22 * hot}px rgba(78, 207, 142, ${0.35 * hot})`;
+          });
+        };
+
+        const reset = () => {
+          chars().forEach(resetChar);
+        };
+
+        h1.addEventListener("mousemove", (e) => paint(e.clientX, e.clientY), {
+          passive: true,
+        });
+        h1.addEventListener("mouseenter", (e) => paint(e.clientX, e.clientY), {
+          passive: true,
+        });
+        h1.addEventListener("mouseleave", reset);
+      }
+
+      setupNameGlow();
+
       function placeSpot(spot, placed) {
         const main = document.querySelector("main");
         const vw = window.innerWidth;
@@ -506,20 +614,50 @@
         return copy;
       }
 
+      function scheduleSpotGlow(spot) {
+        const tick = () => {
+          if (!spot.classList.contains("is-live")) return;
+          if (!document.querySelector(".secrets")?.classList.contains("is-ready")) return;
+
+          spot.classList.add("is-glow");
+          setTimeout(() => spot.classList.remove("is-glow"), 700 + Math.random() * 500);
+          setTimeout(tick, 1400 + Math.random() * 3200);
+        };
+
+        setTimeout(tick, Math.random() * 2000);
+      }
+
+      function startSpotGlows(spots) {
+        setTimeout(() => {
+          spots.forEach((spot) => scheduleSpotGlow(spot));
+        }, 1400);
+      }
+
       function revealSecrets() {
+        const secrets = document.querySelector(".secrets");
         const spots = shuffle([...document.querySelectorAll(".spot")]);
         const placed = [];
         let i = 0;
 
+        secrets.classList.add("is-intro");
+
         const revealNext = () => {
-          if (i >= spots.length) return;
+          if (i >= spots.length) {
+            setTimeout(() => {
+              secrets.classList.remove("is-intro");
+              secrets.classList.add("is-ready");
+              startSpotGlows(spots);
+            }, 600);
+            return;
+          }
+
           placeSpot(spots[i], placed);
           spots[i].classList.add("is-live");
           i += 1;
-          setTimeout(revealNext, 750 + Math.random() * 550);
+          setTimeout(revealNext, 120 + Math.random() * 120);
         };
 
-        setTimeout(revealNext, 1800);
+        setTimeout(revealNext, 400);
       }
 
       if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
