@@ -7,34 +7,27 @@
       content="width=device-width, initial-scale=1, viewport-fit=cover"
     />
     <meta name="color-scheme" content="dark" />
-    <meta name="theme-color" content="#040506" />
+    <meta name="theme-color" content="#060807" />
     <title>Navid Kianfar</title>
     <meta name="description" content="Navid Kianfar — Software Engineer." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500&family=Syne:wght@600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
     <style>
-      @property --hue {
-        syntax: "<angle>";
-        inherits: true;
-        initial-value: 0deg;
-      }
-
       :root {
-        --bg: #040506;
-        --ink: #f2f4f6;
-        --muted: #7a828c;
-        --accent: #9fd0dd;
-        --name-size: clamp(2.15rem, 12vw, 3.4rem);
-        --role-size: 0.65rem;
-        --link-size: 0.7rem;
-        --main-pad-x: clamp(1.25rem, 5vw, 2.5rem);
-        --main-pad-y: clamp(1.5rem, 6vh, 3rem);
-        --parallax: 5px;
-        --content-max: 34rem;
+        --bg: #060807;
+        --ink: #ddebe3;
+        --muted: #5c6b62;
+        --green: #4ecf8e;
+        --name-size: clamp(1.75rem, 8vw, 3.5rem);
+        --meta-size: clamp(0.65rem, 2vw, 0.75rem);
+        --link-size: clamp(0.65rem, 2vw, 0.72rem);
+        --pad-x: clamp(1.25rem, 5vw, 2.5rem);
+        --pad-y: clamp(1.5rem, 6vh, 3rem);
+        --max-w: 36rem;
       }
 
       *,
@@ -52,8 +45,10 @@
       }
 
       body {
-        font-family: "IBM Plex Sans", system-ui, sans-serif;
-        background: var(--bg);
+        font-family: "JetBrains Mono", ui-monospace, monospace;
+        background:
+          radial-gradient(ellipse 80% 60% at 50% 40%, rgba(78, 207, 142, 0.04) 0%, transparent 70%),
+          var(--bg);
         color: var(--ink);
         min-height: 100dvh;
         display: grid;
@@ -61,54 +56,39 @@
         overflow: hidden;
       }
 
-      #fx {
-        position: fixed;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 0;
-        pointer-events: none;
-        contain: strict;
-      }
-
       main {
-        position: relative;
-        z-index: 1;
-        width: min(100%, var(--content-max));
+        width: min(100%, var(--max-w));
         text-align: center;
         padding:
-          calc(var(--main-pad-y) + env(safe-area-inset-top, 0px))
-          calc(var(--main-pad-x) + env(safe-area-inset-right, 0px))
-          calc(var(--main-pad-y) + env(safe-area-inset-bottom, 0px))
-          calc(var(--main-pad-x) + env(safe-area-inset-left, 0px));
-        transform: translate3d(
-          calc(var(--mx, 0) * var(--parallax)),
-          calc(var(--my, 0) * var(--parallax)),
-          0
-        );
+          calc(var(--pad-y) + env(safe-area-inset-top, 0px))
+          calc(var(--pad-x) + env(safe-area-inset-right, 0px))
+          calc(var(--pad-y) + env(safe-area-inset-bottom, 0px))
+          calc(var(--pad-x) + env(safe-area-inset-left, 0px));
       }
 
       .role {
-        font-size: var(--role-size);
-        font-weight: 500;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
+        font-size: var(--meta-size);
+        font-weight: 400;
         color: var(--muted);
-        margin-bottom: clamp(0.75rem, 3vh, 1.25rem);
-        clip-path: inset(0 100% 0 0);
-        animation: role-reveal 1.4s cubic-bezier(0.77, 0, 0.18, 1) 0.2s forwards;
+        margin-bottom: clamp(0.85rem, 3vh, 1.25rem);
+      }
+
+      .role::before {
+        content: "// ";
+        color: var(--green);
+        opacity: 0.7;
       }
 
       h1 {
-        font-family: "Syne", system-ui, sans-serif;
-        font-weight: 600;
         font-size: var(--name-size);
-        line-height: 0.95;
-        letter-spacing: -0.04em;
+        font-weight: 500;
+        line-height: 1.1;
+        letter-spacing: -0.03em;
+        color: var(--ink);
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 0.06em;
+        gap: 0.05em;
       }
 
       .word {
@@ -116,75 +96,30 @@
         overflow: hidden;
       }
 
-      .name-wrap {
-        position: relative;
-        --hue: 0deg;
-        animation: hue-spin 12s linear 1.5s infinite;
-      }
-
       .char {
         display: inline-block;
         opacity: 0;
-        transform: translate3d(0, 110%, 0) rotateZ(8deg);
-        background: linear-gradient(
-          var(--hue),
-          var(--ink) 0%,
-          var(--accent) 30%,
-          #c4a8e8 55%,
-          #7eb8ff 75%,
-          var(--ink) 100%
-        );
-        background-size: 220% 220%;
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-        animation:
-          char-rise 0.75s cubic-bezier(0.22, 1, 0.36, 1) calc(0.35s + var(--i) * 0.055s) forwards,
-          char-wave 4.5s ease-in-out calc(1.6s + var(--i) * 0.12s) infinite;
+        animation: in 0.5s ease calc(0.2s + var(--i) * 0.05s) forwards;
       }
 
       .word--b .char {
-        animation-delay:
-          calc(0.75s + var(--i) * 0.055s),
-          calc(2s + var(--i) * 0.12s);
-      }
-
-      .echo {
-        position: absolute;
-        inset: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 0.06em;
-        font-family: "Syne", system-ui, sans-serif;
-        font-weight: 600;
-        font-size: var(--name-size);
-        line-height: 0.95;
-        letter-spacing: -0.04em;
-        color: rgba(159, 208, 221, 0.08);
-        pointer-events: none;
-        mix-blend-mode: screen;
-        animation: echo-pulse 5s ease-in-out infinite;
+        animation-delay: calc(0.55s + var(--i) * 0.05s);
       }
 
       .links {
-        margin-top: clamp(1.25rem, 4vh, 2rem);
+        margin-top: clamp(1.25rem, 4vh, 1.85rem);
         display: flex;
         justify-content: center;
         align-items: center;
         flex-wrap: wrap;
-        gap: 0.5rem 1rem;
+        gap: 0.5rem 1.1rem;
         opacity: 0;
-        animation: fade-up 0.8s ease 2.1s forwards;
+        animation: in 0.6s ease 1.2s forwards;
       }
 
       .links a {
-        position: relative;
         font-size: var(--link-size);
-        font-weight: 500;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
+        font-weight: 400;
         color: var(--muted);
         text-decoration: none;
         padding: 0.65rem 0.35rem;
@@ -194,96 +129,36 @@
         transition: color 0.2s ease;
       }
 
-      .links a::after {
-        content: "";
-        position: absolute;
-        left: 0;
-        bottom: 6px;
-        width: 100%;
-        height: 1px;
-        background: var(--accent);
-        transform: scaleX(0);
-        transform-origin: right;
-        transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-      }
-
       @media (hover: hover) and (pointer: fine) {
         .links a:hover {
-          color: var(--accent);
-        }
-
-        .links a:hover::after {
-          transform: scaleX(1);
-          transform-origin: left;
+          color: var(--green);
         }
       }
 
       .links a:active {
-        color: var(--accent);
+        color: var(--green);
       }
 
       .links a:focus-visible {
-        outline: 1px solid var(--accent);
+        outline: 1px solid var(--green);
         outline-offset: 4px;
       }
 
       .links .sep {
-        color: rgba(122, 130, 140, 0.45);
+        color: var(--muted);
         font-size: 0.55rem;
+        opacity: 0.4;
       }
 
       .noscript-fallback {
-        font-family: "Syne", system-ui, sans-serif;
         font-size: var(--name-size);
-        font-weight: 600;
-        letter-spacing: -0.04em;
+        font-weight: 500;
       }
 
-      @keyframes role-reveal {
-        to {
-          clip-path: inset(0);
-        }
-      }
-
-      @keyframes char-rise {
-        to {
-          opacity: 1;
-          transform: translate3d(0, 0, 0) rotateZ(0);
-        }
-      }
-
-      @keyframes char-wave {
-        0%,
-        100% {
-          transform: translate3d(0, 0, 0);
-        }
-        50% {
-          transform: translate3d(0, -5px, 0);
-        }
-      }
-
-      @keyframes hue-spin {
-        to {
-          --hue: 360deg;
-        }
-      }
-
-      @keyframes echo-pulse {
-        0%,
-        100% {
-          opacity: 0.35;
-          transform: scale(1);
-        }
-        50% {
-          opacity: 0.7;
-          transform: scale(1.02);
-        }
-      }
-
-      @keyframes fade-up {
+      @keyframes in {
         from {
           opacity: 0;
-          transform: translateY(0.5rem);
+          transform: translateY(0.35rem);
         }
         to {
           opacity: 1;
@@ -291,53 +166,16 @@
         }
       }
 
-      @media (min-width: 480px) {
-        :root {
-          --name-size: clamp(2.5rem, 10vw, 4rem);
-          --role-size: 0.68rem;
-          --parallax: 6px;
-        }
-      }
-
       @media (min-width: 768px) {
         :root {
-          --name-size: clamp(3rem, 8vw, 4.8rem);
-          --role-size: 0.7rem;
-          --link-size: 0.72rem;
-          --content-max: 38rem;
-          --parallax: 8px;
-        }
-
-        .word--b {
-          margin-left: 0.2em;
-        }
-      }
-
-      @media (min-width: 1024px) {
-        :root {
-          --name-size: clamp(3.5rem, 6vw, 5.25rem);
-          --content-max: 42rem;
-          --parallax: 10px;
-        }
-
-        .word--b {
-          margin-left: 0.35em;
-        }
-      }
-
-      @media (min-width: 1440px) {
-        :root {
-          --name-size: 5.5rem;
-          --role-size: 0.75rem;
-          --link-size: 0.75rem;
-          --content-max: 46rem;
+          --max-w: 40rem;
         }
       }
 
       @media (max-height: 500px) and (orientation: landscape) {
         :root {
-          --name-size: clamp(1.85rem, 10vh, 2.75rem);
-          --main-pad-y: 0.75rem;
+          --name-size: clamp(1.4rem, 8vh, 2rem);
+          --pad-y: 0.75rem;
         }
 
         .role {
@@ -352,35 +190,6 @@
           min-height: 2.25rem;
           padding-block: 0.35rem;
         }
-
-        .echo {
-          display: none;
-        }
-      }
-
-      @media (max-width: 360px) {
-        .role {
-          letter-spacing: 0.08em;
-        }
-      }
-
-      @media (max-width: 767px) {
-        .char {
-          animation:
-            char-rise 0.75s cubic-bezier(0.22, 1, 0.36, 1) calc(0.35s + var(--i) * 0.055s) forwards;
-        }
-
-        .word--b .char {
-          animation-delay: calc(0.75s + var(--i) * 0.055s);
-        }
-
-        .name-wrap {
-          animation: none;
-        }
-
-        .echo {
-          display: none;
-        }
       }
 
       @media (prefers-reduced-motion: reduce) {
@@ -391,266 +200,45 @@
           transition: none !important;
         }
 
-        main {
-          transform: none;
-        }
-
-        .role {
-          clip-path: none;
-        }
-
-        .char {
-          opacity: 1;
-          transform: none;
-          color: var(--ink);
-          background: none;
-        }
-
+        .char,
         .links {
           opacity: 1;
-        }
-
-        .echo {
-          display: none;
+          transform: none;
         }
       }
     </style>
   </head>
   <body>
-    <canvas id="fx" aria-hidden="true"></canvas>
-
     <main>
-      <p class="role">Software Engineer</p>
+      <p class="role">software engineer</p>
 
-      <div class="name-wrap">
-        <div class="echo" aria-hidden="true">
-          <span>Navid</span>
-          <span>Kianfar</span>
-        </div>
-        <h1>
-          <span class="word word--a" data-word="Navid"></span>
-          <span class="word word--b" data-word="Kianfar"></span>
-        </h1>
-        <noscript>
-          <p class="noscript-fallback">Navid Kianfar</p>
-        </noscript>
-      </div>
+      <h1>
+        <span class="word word--a" data-word="Navid"></span>
+        <span class="word word--b" data-word="Kianfar"></span>
+      </h1>
+      <noscript>
+        <p class="noscript-fallback">Navid Kianfar</p>
+      </noscript>
 
       <nav class="links" aria-label="Get in touch">
-        <a href="mailto:hello@navidkianfar.com">Email</a>
+        <a href="mailto:hello@navidkianfar.com">email</a>
         <span class="sep" aria-hidden="true">·</span>
-        <a href="https://github.com/nawwid" rel="noopener noreferrer">GitHub</a>
+        <a href="https://github.com/nawwid" rel="noopener noreferrer">github</a>
       </nav>
     </main>
 
     <script>
-      (() => {
-        "use strict";
-
-        const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
-        const finePointerMq = matchMedia("(hover: hover) and (pointer: fine)");
-        const STAR_COUNTS = [20, 32, 40, 52];
-        const BLOB_OFFSETS = [0.06, 0.05, 0.02];
-
-        const words = document.querySelectorAll(".word");
-
-        words.forEach((word) => {
-          const wordFrag = document.createDocumentFragment();
-          [...word.dataset.word].forEach((char, i) => {
-            const span = document.createElement("span");
-            span.className = "char";
-            span.style.setProperty("--i", i);
-            span.textContent = char;
-            wordFrag.appendChild(span);
-          });
-          word.appendChild(wordFrag);
+      document.querySelectorAll(".word").forEach((word) => {
+        const frag = document.createDocumentFragment();
+        [...word.dataset.word].forEach((char, i) => {
+          const span = document.createElement("span");
+          span.className = "char";
+          span.style.setProperty("--i", i);
+          span.textContent = char;
+          frag.appendChild(span);
         });
-
-        if (reducedMotion) return;
-
-        const canvas = document.getElementById("fx");
-        const ctx = canvas.getContext("2d", { alpha: true, desynchronized: true });
-
-        const blobs = [
-          { x: 0.3, y: 0.35, r: 0.35, hue: 195, speed: 0.4 },
-          { x: 0.7, y: 0.65, r: 0.28, hue: 270, speed: -0.3 },
-          { x: 0.5, y: 0.5, r: 0.22, hue: 210, speed: 0.25 },
-        ];
-
-        let w = 0;
-        let h = 0;
-        let dpr = 1;
-        let mx = 0;
-        let my = 0;
-        let parallaxScale = 0;
-        let finePointer = finePointerMq.matches;
-        let starTier = -1;
-        let stars = [];
-        let running = true;
-        let viewW = 0;
-        let viewH = 0;
-        let pointerQueued = false;
-        let pendingPointer = null;
-        let activeBlobCount = 3;
-
-        const vp = () => ({
-          width: visualViewport?.width ?? innerWidth,
-          height: visualViewport?.height ?? innerHeight,
-        });
-
-        function buildStars(count) {
-          stars = new Array(count);
-          for (let i = 0; i < count; i++) {
-            stars[i] = {
-              x: Math.random(),
-              y: Math.random(),
-              z: Math.random() * 0.6 + 0.4,
-              tw: Math.random() * 6.283,
-            };
-          }
-        }
-
-        function ringScale(width, height) {
-          const minSide = Math.min(width, height);
-          const t = Math.max(0, Math.min(1, (768 - minSide) / 768));
-          return 0.22 + t * 0.04;
-        }
-
-        function starTierFor(width, minSide) {
-          if (width < 480 || minSide < 400) return 0;
-          if (width < 768) return 1;
-          if (width < 1024) return 2;
-          return 3;
-        }
-
-        function syncResponsive(width, height) {
-          const minSide = Math.min(width, height);
-          const tier = starTierFor(width, minSide);
-
-          if (tier !== starTier) {
-            starTier = tier;
-            buildStars(STAR_COUNTS[tier]);
-          }
-
-          activeBlobCount = width < 768 ? 2 : 3;
-          parallaxScale = finePointer ? (width >= 1024 ? 14 : 10) : 0;
-        }
-
-        function resize() {
-          const { width, height } = vp();
-          viewW = width;
-          viewH = height;
-          dpr = Math.min(devicePixelRatio || 1, width < 768 ? 1.5 : 2);
-          w = canvas.width = Math.round(width * dpr);
-          h = canvas.height = Math.round(height * dpr);
-          canvas.style.width = `${width}px`;
-          canvas.style.height = `${height}px`;
-          syncResponsive(width, height);
-        }
-
-        function drawBlob(blob, time, minSide) {
-          const px =
-            (blob.x + Math.sin(time * blob.speed + blob.hue) * BLOB_OFFSETS[0] + mx * BLOB_OFFSETS[2]) * w;
-          const py =
-            (blob.y + Math.cos(time * blob.speed * 1.2) * BLOB_OFFSETS[1] + my * BLOB_OFFSETS[2]) * h;
-          const radius = blob.r * minSide;
-
-          ctx.fillStyle = `hsla(${blob.hue}, 55%, 65%, 0.12)`;
-          ctx.beginPath();
-          ctx.arc(px, py, radius, 0, 6.283);
-          ctx.fill();
-        }
-
-        function drawRing(time, minSide) {
-          const cx = w * 0.5 + mx * parallaxScale * dpr;
-          const cy = h * 0.48 + my * parallaxScale * dpr;
-          const r = minSide * ringScale(viewW, viewH);
-
-          ctx.save();
-          ctx.translate(cx, cy);
-          ctx.rotate(time * 0.15);
-          ctx.strokeStyle = "rgba(159, 208, 221, 0.12)";
-          ctx.lineWidth = dpr;
-          ctx.beginPath();
-          ctx.arc(0, 0, r, 0, 6.283);
-          ctx.stroke();
-          ctx.strokeStyle = "rgba(196, 168, 232, 0.35)";
-          ctx.beginPath();
-          ctx.arc(0, 0, r, time, time + 1.885);
-          ctx.stroke();
-          ctx.restore();
-        }
-
-        function drawStars(time) {
-          const size = 1.5 * dpr;
-          for (let i = 0, len = stars.length; i < len; i++) {
-            const s = stars[i];
-            const flicker = 0.35 + Math.sin(time * 2 + s.tw) * 0.35;
-            const px = s.x * w;
-            const py = ((s.y + ((time * 0.02 * s.z) % 1)) * h) - h * 0.1;
-            ctx.fillStyle = `rgba(255,255,255,${flicker * s.z * 0.5})`;
-            ctx.fillRect(px, py, size, size);
-          }
-        }
-
-        function frame(now) {
-          if (!running) return;
-
-          const { width, height } = vp();
-          if (width !== viewW || height !== viewH) resize();
-
-          const t = now * 0.001;
-          const minSide = Math.min(w, h);
-
-          ctx.clearRect(0, 0, w, h);
-          for (let i = 0; i < activeBlobCount; i++) drawBlob(blobs[i], t, minSide);
-          drawRing(t, minSide);
-          drawStars(t);
-
-          requestAnimationFrame(frame);
-        }
-
-        function applyPointer(clientX, clientY) {
-          mx = (clientX / viewW - 0.5) * 2;
-          my = (clientY / viewH - 0.5) * 2;
-          document.body.style.setProperty("--mx", mx.toFixed(3));
-          document.body.style.setProperty("--my", my.toFixed(3));
-        }
-
-        function onPointerMove(event) {
-          if (!finePointer) return;
-          pendingPointer = event;
-          if (pointerQueued) return;
-          pointerQueued = true;
-          requestAnimationFrame(() => {
-            pointerQueued = false;
-            if (!pendingPointer) return;
-            applyPointer(pendingPointer.clientX, pendingPointer.clientY);
-            pendingPointer = null;
-          });
-        }
-
-        resize();
-        requestAnimationFrame(frame);
-
-        finePointerMq.addEventListener("change", (event) => {
-          finePointer = event.matches;
-          syncResponsive(viewW, viewH);
-          if (!finePointer) {
-            mx = 0;
-            my = 0;
-            document.body.style.setProperty("--mx", "0");
-            document.body.style.setProperty("--my", "0");
-          }
-        });
-
-        addEventListener("pointermove", onPointerMove, { passive: true });
-
-        document.addEventListener("visibilitychange", () => {
-          running = !document.hidden;
-          if (running) requestAnimationFrame(frame);
-        });
-      })();
+        word.appendChild(frag);
+      });
     </script>
   </body>
 </html>
