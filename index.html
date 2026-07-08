@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Navid Kianfar</title>
+    <meta name="description" content="Personal site of Navid Kianfar." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=Source+Sans+3:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --ink: #1a2421;
+        --muted: #4a5c56;
+        --paper: #e8efe9;
+        --moss: #2f5d4a;
+        --moss-deep: #1e3d32;
+        --glow-soft: rgba(255, 255, 255, 0.35);
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body {
+        min-height: 100%;
+      }
+
+      body {
+        font-family: "Source Sans 3", sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(ellipse 90% 70% at 10% 20%, #c5d9ce 0%, transparent 55%),
+          radial-gradient(ellipse 80% 60% at 90% 80%, #b7cfc0 0%, transparent 50%),
+          linear-gradient(160deg, #dce8e1 0%, var(--paper) 45%, #d0ddd4 100%);
+        display: grid;
+        place-items: center;
+        padding: 2rem;
+        overflow-x: hidden;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      main {
+        position: relative;
+        z-index: 1;
+        width: min(100%, 36rem);
+        text-align: center;
+        animation: rise 0.9s ease-out both;
+      }
+
+      .brand {
+        font-family: "Fraunces", serif;
+        font-optical-sizing: auto;
+        font-weight: 650;
+        font-size: clamp(2.75rem, 10vw, 4.25rem);
+        line-height: 1.05;
+        letter-spacing: -0.03em;
+        color: var(--moss-deep);
+        margin-bottom: 1rem;
+        animation: fade-in 1s ease 0.15s both;
+      }
+
+      .lede {
+        font-size: clamp(1.05rem, 2.5vw, 1.2rem);
+        font-weight: 400;
+        line-height: 1.55;
+        color: var(--muted);
+        max-width: 28rem;
+        margin: 0 auto 2rem;
+        animation: fade-in 1s ease 0.35s both;
+      }
+
+      .cta {
+        display: inline-block;
+        font-size: 0.95rem;
+        font-weight: 500;
+        letter-spacing: 0.02em;
+        color: var(--paper);
+        background: var(--moss);
+        text-decoration: none;
+        padding: 0.85rem 1.5rem;
+        border-radius: 0.35rem;
+        transition: background 0.2s ease, transform 0.2s ease;
+        animation: fade-in 1s ease 0.55s both;
+      }
+
+      .cta:hover {
+        background: var(--moss-deep);
+        transform: translateY(-1px);
+      }
+
+      .cta:focus-visible {
+        outline: 2px solid var(--moss-deep);
+        outline-offset: 3px;
+      }
+
+      @keyframes rise {
+        from {
+          opacity: 0;
+          transform: translateY(1.25rem);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fade-in {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        main,
+        .brand,
+        .lede,
+        .cta {
+          animation: none;
+        }
+
+        .cta:hover {
+          transform: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1 class="brand">Navid Kianfar</h1>
+      <p class="lede">Building thoughtful software and clear experiences.</p>
+      <a class="cta" href="mailto:hello@navidkianfar.com">Get in touch</a>
+    </main>
+  </body>
+</html>
