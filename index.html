@@ -4,21 +4,25 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Navid Kianfar</title>
-    <meta name="description" content="Personal site of Navid Kianfar." />
+    <meta name="description" content="Navid Kianfar — Software Engineer." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=Source+Sans+3:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500&family=Syne:wght@500;600&display=swap"
       rel="stylesheet"
     />
     <style>
+      @property --hue {
+        syntax: "<angle>";
+        inherits: false;
+        initial-value: 0deg;
+      }
+
       :root {
-        --ink: #1a2421;
-        --muted: #4a5c56;
-        --paper: #e8efe9;
-        --moss: #2f5d4a;
-        --moss-deep: #1e3d32;
-        --glow-soft: rgba(255, 255, 255, 0.35);
+        --bg: #040506;
+        --ink: #f2f4f6;
+        --muted: #7a828c;
+        --accent: #9fd0dd;
       }
 
       * {
@@ -29,89 +33,227 @@
 
       html,
       body {
-        min-height: 100%;
+        height: 100%;
       }
 
       body {
-        font-family: "Source Sans 3", sans-serif;
+        font-family: "IBM Plex Sans", sans-serif;
+        background: var(--bg);
         color: var(--ink);
-        background:
-          radial-gradient(ellipse 90% 70% at 10% 20%, #c5d9ce 0%, transparent 55%),
-          radial-gradient(ellipse 80% 60% at 90% 80%, #b7cfc0 0%, transparent 50%),
-          linear-gradient(160deg, #dce8e1 0%, var(--paper) 45%, #d0ddd4 100%);
+        min-height: 100dvh;
         display: grid;
         place-items: center;
-        padding: 2rem;
-        overflow-x: hidden;
+        overflow: hidden;
       }
 
-      body::before {
-        content: "";
+      #fx {
         position: fixed;
         inset: 0;
-        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-        pointer-events: none;
+        width: 100%;
+        height: 100%;
         z-index: 0;
+        pointer-events: none;
       }
 
       main {
         position: relative;
         z-index: 1;
-        width: min(100%, 36rem);
         text-align: center;
-        animation: rise 0.9s ease-out both;
+        padding: 2rem;
+        transform: translate(
+          calc(var(--mx, 0) * 8px),
+          calc(var(--my, 0) * 8px)
+        );
+        transition: transform 0.15s ease-out;
       }
 
-      .brand {
-        font-family: "Fraunces", serif;
-        font-optical-sizing: auto;
-        font-weight: 650;
-        font-size: clamp(2.75rem, 10vw, 4.25rem);
-        line-height: 1.05;
-        letter-spacing: -0.03em;
-        color: var(--moss-deep);
-        margin-bottom: 1rem;
-        animation: fade-in 1s ease 0.15s both;
-      }
-
-      .lede {
-        font-size: clamp(1.05rem, 2.5vw, 1.2rem);
-        font-weight: 400;
-        line-height: 1.55;
-        color: var(--muted);
-        max-width: 28rem;
-        margin: 0 auto 2rem;
-        animation: fade-in 1s ease 0.35s both;
-      }
-
-      .cta {
-        display: inline-block;
-        font-size: 0.95rem;
+      .role {
+        font-size: 0.7rem;
         font-weight: 500;
-        letter-spacing: 0.02em;
-        color: var(--paper);
-        background: var(--moss);
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 1.1rem;
+        clip-path: inset(0 100% 0 0);
+        animation: role-reveal 1.4s cubic-bezier(0.77, 0, 0.18, 1) 0.2s forwards;
+      }
+
+      h1 {
+        font-family: "Syne", sans-serif;
+        font-weight: 600;
+        font-size: clamp(2.6rem, 10vw, 4.8rem);
+        line-height: 0.95;
+        letter-spacing: -0.04em;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.08em;
+      }
+
+      .word {
+        display: inline-flex;
+        overflow: hidden;
+      }
+
+      .word--b {
+        margin-left: 0.35em;
+      }
+
+      .char {
+        display: inline-block;
+        opacity: 0;
+        transform: translate3d(0, 110%, 0) rotateZ(8deg);
+        background: linear-gradient(
+          var(--hue),
+          #f2f4f6 0%,
+          #9fd0dd 30%,
+          #c4a8e8 55%,
+          #7eb8ff 75%,
+          #f2f4f6 100%
+        );
+        background-size: 220% 220%;
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        animation:
+          char-rise 0.75s cubic-bezier(0.22, 1, 0.36, 1) calc(0.35s + var(--i) * 0.055s) forwards,
+          char-wave 4.5s ease-in-out calc(1.6s + var(--i) * 0.12s) infinite,
+          hue-spin 10s linear 1.5s infinite;
+      }
+
+      .word--b .char {
+        animation-delay:
+          calc(0.75s + var(--i) * 0.055s),
+          calc(2s + var(--i) * 0.12s),
+          1.5s;
+      }
+
+      .char.space {
+        width: 0.3em;
+      }
+
+      .echo {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.08em;
+        font-family: "Syne", sans-serif;
+        font-weight: 600;
+        font-size: clamp(2.6rem, 10vw, 4.8rem);
+        line-height: 0.95;
+        letter-spacing: -0.04em;
+        color: rgba(159, 208, 221, 0.08);
+        pointer-events: none;
+        mix-blend-mode: screen;
+        animation: echo-pulse 5s ease-in-out infinite;
+      }
+
+      .name-wrap {
+        position: relative;
+        --hue: 0deg;
+      }
+
+      .links {
+        margin-top: 1.85rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.65rem;
+        opacity: 0;
+        animation: fade-up 0.8s ease 2.1s forwards;
+      }
+
+      .links a {
+        position: relative;
+        font-size: 0.7rem;
+        font-weight: 500;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--muted);
         text-decoration: none;
-        padding: 0.85rem 1.5rem;
-        border-radius: 0.35rem;
-        transition: background 0.2s ease, transform 0.2s ease;
-        animation: fade-in 1s ease 0.55s both;
+        transition: color 0.2s ease;
       }
 
-      .cta:hover {
-        background: var(--moss-deep);
-        transform: translateY(-1px);
+      .links a::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -3px;
+        width: 100%;
+        height: 1px;
+        background: var(--accent);
+        transform: scaleX(0);
+        transform-origin: right;
+        transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
       }
 
-      .cta:focus-visible {
-        outline: 2px solid var(--moss-deep);
-        outline-offset: 3px;
+      .links a:hover {
+        color: var(--accent);
       }
 
-      @keyframes rise {
+      .links a:hover::after {
+        transform: scaleX(1);
+        transform-origin: left;
+      }
+
+      .links a:focus-visible {
+        outline: 1px solid var(--accent);
+        outline-offset: 4px;
+      }
+
+      .links .sep {
+        color: rgba(122, 130, 140, 0.45);
+        font-size: 0.55rem;
+      }
+
+      @keyframes role-reveal {
+        to {
+          clip-path: inset(0 0 0 0);
+        }
+      }
+
+      @keyframes char-rise {
+        to {
+          opacity: 1;
+          transform: translate3d(0, 0, 0) rotateZ(0);
+        }
+      }
+
+      @keyframes char-wave {
+        0%,
+        100% {
+          transform: translate3d(0, 0, 0);
+        }
+        50% {
+          transform: translate3d(0, -5px, 0);
+        }
+      }
+
+      @keyframes hue-spin {
+        to {
+          --hue: 360deg;
+        }
+      }
+
+      @keyframes echo-pulse {
+        0%,
+        100% {
+          opacity: 0.35;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.7;
+          transform: scale(1.02);
+        }
+      }
+
+      @keyframes fade-up {
         from {
           opacity: 0;
-          transform: translateY(1.25rem);
+          transform: translateY(0.5rem);
         }
         to {
           opacity: 1;
@@ -119,34 +261,167 @@
         }
       }
 
-      @keyframes fade-in {
-        from {
-          opacity: 0;
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation: none !important;
+          transition: none !important;
         }
-        to {
+
+        main {
+          transform: none;
+        }
+
+        .role {
+          clip-path: none;
+        }
+
+        .char {
+          opacity: 1;
+          transform: none;
+          color: var(--ink);
+          background: none;
+        }
+
+        .links {
           opacity: 1;
         }
-      }
 
-      @media (prefers-reduced-motion: reduce) {
-        main,
-        .brand,
-        .lede,
-        .cta {
-          animation: none;
-        }
-
-        .cta:hover {
-          transform: none;
+        .echo {
+          display: none;
         }
       }
     </style>
   </head>
   <body>
+    <canvas id="fx" aria-hidden="true"></canvas>
+
     <main>
-      <h1 class="brand">Navid Kianfar</h1>
-      <p class="lede">Building thoughtful software and clear experiences.</p>
-      <a class="cta" href="mailto:hello@navidkianfar.com">Get in touch</a>
+      <p class="role">Software Engineer</p>
+
+      <div class="name-wrap">
+        <div class="echo" aria-hidden="true">
+          <span>Navid</span>
+          <span>Kianfar</span>
+        </div>
+        <h1 aria-label="Navid Kianfar">
+          <span class="word word--a" data-word="Navid"></span>
+          <span class="word word--b" data-word="Kianfar"></span>
+        </h1>
+      </div>
+
+      <nav class="links" aria-label="Get in touch">
+        <a href="mailto:hello@navidkianfar.com">Email</a>
+        <span class="sep" aria-hidden="true">·</span>
+        <a href="https://github.com/nawwid" rel="noopener noreferrer">GitHub</a>
+      </nav>
     </main>
+
+    <script>
+      const words = document.querySelectorAll(".word");
+
+      words.forEach((word) => {
+        [...word.dataset.word].forEach((char, i) => {
+          const span = document.createElement("span");
+          span.className = "char";
+          span.style.setProperty("--i", i);
+          span.textContent = char;
+          word.appendChild(span);
+        });
+      });
+
+      const canvas = document.getElementById("fx");
+      const ctx = canvas.getContext("2d", { alpha: true });
+      let w, h, dpr, t = 0, running = true;
+      let mx = 0, my = 0;
+
+      const blobs = [
+        { x: 0.3, y: 0.35, r: 0.35, hue: 195, speed: 0.4 },
+        { x: 0.7, y: 0.65, r: 0.28, hue: 270, speed: -0.3 },
+        { x: 0.5, y: 0.5, r: 0.22, hue: 210, speed: 0.25 },
+      ];
+
+      const stars = Array.from({ length: 48 }, () => ({
+        x: Math.random(),
+        y: Math.random(),
+        z: Math.random() * 0.6 + 0.4,
+        tw: Math.random() * Math.PI * 2,
+      }));
+
+      function resize() {
+        dpr = Math.min(devicePixelRatio || 1, 2);
+        w = canvas.width = innerWidth * dpr;
+        h = canvas.height = innerHeight * dpr;
+        canvas.style.width = innerWidth + "px";
+        canvas.style.height = innerHeight + "px";
+      }
+
+      function drawBlob(b, time) {
+        const px = (b.x + Math.sin(time * b.speed + b.hue) * 0.06 + mx * 0.02) * w;
+        const py = (b.y + Math.cos(time * b.speed * 1.2) * 0.05 + my * 0.02) * h;
+        const pr = b.r * Math.min(w, h);
+        const g = ctx.createRadialGradient(px, py, 0, px, py, pr);
+        g.addColorStop(0, `hsla(${b.hue}, 55%, 65%, 0.14)`);
+        g.addColorStop(1, "transparent");
+        ctx.fillStyle = g;
+        ctx.fillRect(px - pr, py - pr, pr * 2, pr * 2);
+      }
+
+      function drawRing(time) {
+        const cx = w * 0.5 + mx * 12 * dpr;
+        const cy = h * 0.48 + my * 12 * dpr;
+        const r = Math.min(w, h) * 0.22;
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(time * 0.15);
+        ctx.strokeStyle = "rgba(159, 208, 221, 0.12)";
+        ctx.lineWidth = 1 * dpr;
+        ctx.beginPath();
+        ctx.arc(0, 0, r, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.strokeStyle = "rgba(196, 168, 232, 0.35)";
+        ctx.beginPath();
+        ctx.arc(0, 0, r, time, time + Math.PI * 0.6);
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      function drawStars(time) {
+        stars.forEach((s) => {
+          const flicker = 0.35 + Math.sin(time * 2 + s.tw) * 0.35;
+          const px = s.x * w;
+          const py = (s.y + ((time * 0.02 * s.z) % 1)) * h - h * 0.1;
+          ctx.fillStyle = `rgba(255,255,255,${flicker * s.z * 0.5})`;
+          ctx.fillRect(px, py, 1.5 * dpr, 1.5 * dpr);
+        });
+      }
+
+      function frame(now) {
+        if (!running) return;
+        t = now * 0.001;
+        ctx.clearRect(0, 0, w, h);
+        blobs.forEach((b) => drawBlob(b, t));
+        drawRing(t);
+        drawStars(t);
+        requestAnimationFrame(frame);
+      }
+
+      resize();
+      requestAnimationFrame(frame);
+      addEventListener("resize", resize);
+
+      addEventListener("pointermove", (e) => {
+        mx = (e.clientX / innerWidth - 0.5) * 2;
+        my = (e.clientY / innerHeight - 0.5) * 2;
+        document.body.style.setProperty("--mx", mx.toFixed(3));
+        document.body.style.setProperty("--my", my.toFixed(3));
+      });
+
+      document.addEventListener("visibilitychange", () => {
+        running = !document.hidden;
+        if (running) requestAnimationFrame(frame);
+      });
+    </script>
   </body>
 </html>
