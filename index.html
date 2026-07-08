@@ -74,6 +74,29 @@
         font-weight: 400;
         color: var(--muted);
         margin-bottom: clamp(0.85rem, 3vh, 1.25rem);
+        min-height: 1.4em;
+        opacity: 1;
+        filter: blur(0);
+        transform: translateY(0);
+        transition: filter 0.35s ease;
+      }
+
+      .role.is-blurred {
+        opacity: 1;
+        filter: blur(7px);
+        transform: translateY(0);
+      }
+
+      .role__cursor {
+        display: inline-block;
+        color: var(--green);
+        opacity: 0;
+        margin-left: 0.05em;
+        animation: blink 0.9s step-end infinite;
+      }
+
+      .role.is-typing .role__cursor {
+        opacity: 0.75;
       }
 
       .role::before {
@@ -227,15 +250,22 @@
       }
 
       .spot.is-live:hover .spot__hint,
-      .spot.is-live:focus-visible .spot__hint {
+      .spot.is-live:focus-visible .spot__hint,
+      .spot.is-live.is-open .spot__hint {
         opacity: 0.5;
       }
 
       .spot.is-live:hover .spot__data,
       .spot.is-live:focus-visible .spot__data,
-      .spot.is-live:active .spot__data {
+      .spot.is-live.is-open .spot__data {
         opacity: 1;
         transform: translate(-50%, calc(-50% - 0.2rem));
+      }
+
+      @media (hover: none), (pointer: coarse) {
+        .spot.is-live {
+          cursor: pointer;
+        }
       }
 
       .spot:focus-visible {
@@ -281,6 +311,16 @@
         }
       }
 
+      @keyframes blink {
+        0%,
+        100% {
+          opacity: 0.75;
+        }
+        50% {
+          opacity: 0;
+        }
+      }
+
       @media (min-width: 768px) {
         :root {
           --max-w: 40rem;
@@ -316,8 +356,16 @@
         }
 
         .char,
-        .links {
+        .links,
+        .role {
           opacity: 1;
+          transform: none;
+          filter: none;
+        }
+
+        .role.is-blurred {
+          opacity: 1;
+          filter: none;
           transform: none;
         }
 
@@ -329,7 +377,9 @@
   </head>
   <body>
     <main>
-      <p class="role">software engineer</p>
+      <p class="role" aria-label="software engineer" aria-live="polite">
+        <span class="role__text">software engineer</span><span class="role__cursor" aria-hidden="true">▌</span>
+      </p>
 
       <h1>
         <span class="word word--a" data-word="Navid"></span>
@@ -475,6 +525,90 @@
       if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
         revealSecrets();
       }
+
+      function setupSpotTaps() {
+        const touchLike = matchMedia("(hover: none), (pointer: coarse)").matches;
+        if (!touchLike) return;
+
+        document.querySelectorAll(".spot").forEach((spot) => {
+          spot.addEventListener("click", (e) => {
+            if (!spot.classList.contains("is-live")) return;
+            e.stopPropagation();
+            const wasOpen = spot.classList.contains("is-open");
+            document.querySelectorAll(".spot.is-open").forEach((s) => s.classList.remove("is-open"));
+            if (!wasOpen) spot.classList.add("is-open");
+          });
+        });
+
+        document.addEventListener("click", () => {
+          document.querySelectorAll(".spot.is-open").forEach((s) => s.classList.remove("is-open"));
+        });
+      }
+
+      setupSpotTaps();
+
+      function setupRoleCycle() {
+        if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+        const role = document.querySelector(".role");
+        const text = role?.querySelector(".role__text");
+        if (!role || !text) return;
+
+        const roles = [
+          "software engineer",
+          "devops engineer",
+          "backend developer",
+          "mobile developer",
+          "tech lead",
+          "flutter developer",
+          "android developer",
+          "node.js developer",
+        ];
+
+        const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+        let current = text.textContent.trim();
+        let busy = false;
+
+        const pickRole = () => {
+          let next = current;
+          while (next === current) {
+            next = roles[Math.floor(Math.random() * roles.length)];
+          }
+          return next;
+        };
+
+        const erase = async () => {
+          role.classList.add("is-typing", "is-blurred");
+          for (let i = current.length; i >= 0; i--) {
+            text.textContent = current.slice(0, i);
+            await wait(28 + Math.random() * 22);
+          }
+        };
+
+        const type = async (next) => {
+          for (let i = 0; i <= next.length; i++) {
+            text.textContent = next.slice(0, i);
+            if (i / next.length > 0.45) role.classList.remove("is-blurred");
+            await wait(38 + Math.random() * 28);
+          }
+          role.classList.remove("is-blurred", "is-typing");
+        };
+
+        const swap = async () => {
+          if (busy) return;
+          busy = true;
+          await erase();
+          current = pickRole();
+          role.setAttribute("aria-label", current);
+          await type(current);
+          busy = false;
+          setTimeout(swap, 5500 + Math.random() * 7500);
+        };
+
+        setTimeout(swap, 4000 + Math.random() * 4000);
+      }
+
+      setupRoleCycle();
     </script>
   </body>
 </html>
