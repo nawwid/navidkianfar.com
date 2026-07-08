@@ -2,7 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
     <title>Navid Kianfar</title>
     <meta name="description" content="Navid Kianfar — Software Engineer." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -23,6 +26,13 @@
         --ink: #f2f4f6;
         --muted: #7a828c;
         --accent: #9fd0dd;
+        --name-size: clamp(2.15rem, 12vw, 3.4rem);
+        --role-size: 0.65rem;
+        --link-size: 0.7rem;
+        --main-pad-x: clamp(1.25rem, 5vw, 2.5rem);
+        --main-pad-y: clamp(1.5rem, 6vh, 3rem);
+        --parallax: 5px;
+        --content-max: 34rem;
       }
 
       * {
@@ -44,6 +54,8 @@
         display: grid;
         place-items: center;
         overflow: hidden;
+        -webkit-text-size-adjust: 100%;
+        text-size-adjust: 100%;
       }
 
       #fx {
@@ -58,22 +70,33 @@
       main {
         position: relative;
         z-index: 1;
+        width: min(100%, var(--content-max));
         text-align: center;
-        padding: 2rem;
+        padding:
+          calc(var(--main-pad-y) + env(safe-area-inset-top, 0px))
+          calc(var(--main-pad-x) + env(safe-area-inset-right, 0px))
+          calc(var(--main-pad-y) + env(safe-area-inset-bottom, 0px))
+          calc(var(--main-pad-x) + env(safe-area-inset-left, 0px));
         transform: translate(
-          calc(var(--mx, 0) * 8px),
-          calc(var(--my, 0) * 8px)
+          calc(var(--mx, 0) * var(--parallax)),
+          calc(var(--my, 0) * var(--parallax))
         );
         transition: transform 0.15s ease-out;
       }
 
+      @media (hover: hover) and (pointer: fine) {
+        main {
+          will-change: transform;
+        }
+      }
+
       .role {
-        font-size: 0.7rem;
+        font-size: var(--role-size);
         font-weight: 500;
-        letter-spacing: 0.14em;
+        letter-spacing: 0.12em;
         text-transform: uppercase;
         color: var(--muted);
-        margin-bottom: 1.1rem;
+        margin-bottom: clamp(0.75rem, 3vh, 1.25rem);
         clip-path: inset(0 100% 0 0);
         animation: role-reveal 1.4s cubic-bezier(0.77, 0, 0.18, 1) 0.2s forwards;
       }
@@ -81,13 +104,13 @@
       h1 {
         font-family: "Syne", sans-serif;
         font-weight: 600;
-        font-size: clamp(2.6rem, 10vw, 4.8rem);
+        font-size: var(--name-size);
         line-height: 0.95;
         letter-spacing: -0.04em;
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 0.08em;
+        gap: 0.06em;
       }
 
       .word {
@@ -96,7 +119,7 @@
       }
 
       .word--b {
-        margin-left: 0.35em;
+        margin-left: 0;
       }
 
       .char {
@@ -139,10 +162,10 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 0.08em;
+        gap: 0.06em;
         font-family: "Syne", sans-serif;
         font-weight: 600;
-        font-size: clamp(2.6rem, 10vw, 4.8rem);
+        font-size: var(--name-size);
         line-height: 0.95;
         letter-spacing: -0.04em;
         color: rgba(159, 208, 221, 0.08);
@@ -157,23 +180,28 @@
       }
 
       .links {
-        margin-top: 1.85rem;
+        margin-top: clamp(1.25rem, 4vh, 2rem);
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 0.65rem;
+        flex-wrap: wrap;
+        gap: 0.5rem 1rem;
         opacity: 0;
         animation: fade-up 0.8s ease 2.1s forwards;
       }
 
       .links a {
         position: relative;
-        font-size: 0.7rem;
+        font-size: var(--link-size);
         font-weight: 500;
         letter-spacing: 0.06em;
         text-transform: uppercase;
         color: var(--muted);
         text-decoration: none;
+        padding: 0.65rem 0.35rem;
+        min-height: 2.75rem;
+        display: inline-flex;
+        align-items: center;
         transition: color 0.2s ease;
       }
 
@@ -194,9 +222,15 @@
         color: var(--accent);
       }
 
-      .links a:hover::after {
-        transform: scaleX(1);
-        transform-origin: left;
+      @media (hover: hover) and (pointer: fine) {
+        .links a:hover::after {
+          transform: scaleX(1);
+          transform-origin: left;
+        }
+      }
+
+      .links a:active {
+        color: var(--accent);
       }
 
       .links a:focus-visible {
@@ -258,6 +292,75 @@
         to {
           opacity: 1;
           transform: translateY(0);
+        }
+      }
+
+      @media (min-width: 480px) {
+        :root {
+          --name-size: clamp(2.5rem, 10vw, 4rem);
+          --role-size: 0.68rem;
+          --parallax: 6px;
+        }
+      }
+
+      @media (min-width: 768px) {
+        :root {
+          --name-size: clamp(3rem, 8vw, 4.8rem);
+          --role-size: 0.7rem;
+          --link-size: 0.72rem;
+          --content-max: 38rem;
+          --parallax: 8px;
+        }
+
+        .word--b {
+          margin-left: 0.2em;
+        }
+      }
+
+      @media (min-width: 1024px) {
+        :root {
+          --name-size: clamp(3.5rem, 6vw, 5.25rem);
+          --content-max: 42rem;
+          --parallax: 10px;
+        }
+
+        .word--b {
+          margin-left: 0.35em;
+        }
+      }
+
+      @media (min-width: 1440px) {
+        :root {
+          --name-size: 5.5rem;
+          --role-size: 0.75rem;
+          --link-size: 0.75rem;
+          --content-max: 46rem;
+        }
+      }
+
+      @media (max-height: 500px) and (orientation: landscape) {
+        :root {
+          --name-size: clamp(1.85rem, 10vh, 2.75rem);
+          --main-pad-y: 0.75rem;
+        }
+
+        .role {
+          margin-bottom: 0.5rem;
+        }
+
+        .links {
+          margin-top: 0.75rem;
+        }
+
+        .links a {
+          min-height: 2.25rem;
+          padding-block: 0.35rem;
+        }
+      }
+
+      @media (max-width: 360px) {
+        .role {
+          letter-spacing: 0.08em;
         }
       }
 
@@ -335,6 +438,9 @@
       const ctx = canvas.getContext("2d", { alpha: true });
       let w, h, dpr, t = 0, running = true;
       let mx = 0, my = 0;
+      let parallaxScale = 12;
+      let finePointer = matchMedia("(hover: hover) and (pointer: fine)").matches;
+      let starTier = -1;
 
       const blobs = [
         { x: 0.3, y: 0.35, r: 0.35, hue: 195, speed: 0.4 },
@@ -342,19 +448,70 @@
         { x: 0.5, y: 0.5, r: 0.22, hue: 210, speed: 0.25 },
       ];
 
-      const stars = Array.from({ length: 48 }, () => ({
-        x: Math.random(),
-        y: Math.random(),
-        z: Math.random() * 0.6 + 0.4,
-        tw: Math.random() * Math.PI * 2,
-      }));
+      let stars = [];
+
+      function getViewport() {
+        return {
+          width: visualViewport?.width ?? innerWidth,
+          height: visualViewport?.height ?? innerHeight,
+        };
+      }
+
+      function buildStars(count) {
+        stars = Array.from({ length: count }, () => ({
+          x: Math.random(),
+          y: Math.random(),
+          z: Math.random() * 0.6 + 0.4,
+          tw: Math.random() * Math.PI * 2,
+        }));
+      }
+
+      function getRingScale(viewW, viewH) {
+        const minSide = Math.min(viewW, viewH);
+        const t = Math.max(0, Math.min(1, (768 - minSide) / 768));
+        return 0.22 + t * 0.04;
+      }
+
+      function getStarTier(width, minSide) {
+        if (width < 480 || minSide < 400) return 0;
+        if (width < 768) return 1;
+        if (width < 1024) return 2;
+        return 3;
+      }
+
+      function updateResponsive() {
+        const { width, height } = getViewport();
+        const minSide = Math.min(width, height);
+        const tier = getStarTier(width, minSide);
+        const counts = [24, 36, 44, 56];
+
+        if (tier !== starTier) {
+          starTier = tier;
+          buildStars(counts[tier]);
+        }
+
+        parallaxScale = finePointer ? (width >= 1024 ? 14 : 10) : 0;
+      }
 
       function resize() {
-        dpr = Math.min(devicePixelRatio || 1, 2);
-        w = canvas.width = innerWidth * dpr;
-        h = canvas.height = innerHeight * dpr;
-        canvas.style.width = innerWidth + "px";
-        canvas.style.height = innerHeight + "px";
+        const { width, height } = getViewport();
+        const isMobile = width < 768;
+        dpr = Math.min(devicePixelRatio || 1, isMobile ? 1.5 : 2);
+        w = canvas.width = Math.round(width * dpr);
+        h = canvas.height = Math.round(height * dpr);
+        canvas.style.width = width + "px";
+        canvas.style.height = height + "px";
+        updateResponsive();
+      }
+
+      let resizeQueued = false;
+      function onResize() {
+        if (resizeQueued) return;
+        resizeQueued = true;
+        requestAnimationFrame(() => {
+          resizeQueued = false;
+          resize();
+        });
       }
 
       function drawBlob(b, time) {
@@ -369,9 +526,12 @@
       }
 
       function drawRing(time) {
-        const cx = w * 0.5 + mx * 12 * dpr;
-        const cy = h * 0.48 + my * 12 * dpr;
-        const r = Math.min(w, h) * 0.22;
+        const viewW = w / dpr;
+        const viewH = h / dpr;
+        const ringScale = getRingScale(viewW, viewH);
+        const cx = w * 0.5 + mx * parallaxScale * dpr;
+        const cy = h * 0.48 + my * parallaxScale * dpr;
+        const r = Math.min(w, h) * ringScale;
         ctx.save();
         ctx.translate(cx, cy);
         ctx.rotate(time * 0.15);
@@ -397,8 +557,19 @@
         });
       }
 
+      let lastViewW = 0;
+      let lastViewH = 0;
+
       function frame(now) {
         if (!running) return;
+
+        const { width, height } = getViewport();
+        if (width !== lastViewW || height !== lastViewH) {
+          lastViewW = width;
+          lastViewH = height;
+          resize();
+        }
+
         t = now * 0.001;
         ctx.clearRect(0, 0, w, h);
         blobs.forEach((b) => drawBlob(b, t));
@@ -408,12 +579,22 @@
       }
 
       resize();
+      lastViewW = getViewport().width;
+      lastViewH = getViewport().height;
       requestAnimationFrame(frame);
-      addEventListener("resize", resize);
+      addEventListener("resize", onResize);
+      visualViewport?.addEventListener("resize", onResize);
+
+      matchMedia("(hover: hover) and (pointer: fine)").addEventListener("change", (e) => {
+        finePointer = e.matches;
+        updateResponsive();
+      });
 
       addEventListener("pointermove", (e) => {
-        mx = (e.clientX / innerWidth - 0.5) * 2;
-        my = (e.clientY / innerHeight - 0.5) * 2;
+        if (!finePointer) return;
+        const { width, height } = getViewport();
+        mx = (e.clientX / width - 0.5) * 2;
+        my = (e.clientY / height - 0.5) * 2;
         document.body.style.setProperty("--mx", mx.toFixed(3));
         document.body.style.setProperty("--my", my.toFixed(3));
       });
