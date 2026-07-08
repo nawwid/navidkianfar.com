@@ -64,6 +64,9 @@
           calc(var(--pad-x) + env(safe-area-inset-right, 0px))
           calc(var(--pad-y) + env(safe-area-inset-bottom, 0px))
           calc(var(--pad-x) + env(safe-area-inset-left, 0px));
+        position: relative;
+        z-index: 1;
+        pointer-events: none;
       }
 
       .role {
@@ -127,6 +130,7 @@
         display: inline-flex;
         align-items: center;
         transition: color 0.2s ease;
+        pointer-events: auto;
       }
 
       @media (hover: hover) and (pointer: fine) {
@@ -153,6 +157,117 @@
       .noscript-fallback {
         font-size: var(--name-size);
         font-weight: 500;
+      }
+
+      .secrets {
+        position: fixed;
+        inset: 0;
+        z-index: 2;
+        pointer-events: none;
+      }
+
+      .spot {
+        position: absolute;
+        left: var(--x);
+        top: var(--y);
+        width: 4.5rem;
+        height: 4.5rem;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        cursor: crosshair;
+        pointer-events: none;
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.4);
+      }
+
+      .spot.is-live {
+        pointer-events: auto;
+        animation: spot-in 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      }
+
+      .spot__hint {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        font-size: 0.68rem;
+        line-height: 1;
+        color: var(--green);
+        opacity: 0;
+        transition: opacity 0.2s ease;
+        text-shadow: 0 0 12px rgba(78, 207, 142, 0.35);
+      }
+
+      .spot.is-live .spot__hint {
+        opacity: 0.2;
+        animation: spot-pulse 2.4s ease-in-out infinite;
+      }
+
+      .spot__data {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        font-size: clamp(0.58rem, 1.6vw, 0.68rem);
+        font-weight: 400;
+        line-height: 1.4;
+        color: var(--green);
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s ease, transform 0.2s ease;
+        text-shadow: 0 0 24px rgba(78, 207, 142, 0.45);
+        z-index: 1;
+      }
+
+      .spot__data::before {
+        content: "// ";
+        opacity: 0.65;
+      }
+
+      .spot.is-live:hover .spot__hint,
+      .spot.is-live:focus-visible .spot__hint {
+        opacity: 0.5;
+      }
+
+      .spot.is-live:hover .spot__data,
+      .spot.is-live:focus-visible .spot__data,
+      .spot.is-live:active .spot__data {
+        opacity: 1;
+        transform: translate(-50%, calc(-50% - 0.2rem));
+      }
+
+      .spot:focus-visible {
+        outline: 1px solid rgba(78, 207, 142, 0.35);
+        outline-offset: 2px;
+      }
+
+      @keyframes spot-in {
+        0% {
+          opacity: 0;
+          transform: translate(-50%, -50%) scale(0.2);
+        }
+        70% {
+          opacity: 1;
+          transform: translate(-50%, -50%) scale(1.08);
+        }
+        100% {
+          opacity: 1;
+          transform: translate(-50%, -50%) scale(1);
+        }
+      }
+
+      @keyframes spot-pulse {
+        0%,
+        100% {
+          opacity: 0.12;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.4;
+          transform: scale(1.25);
+        }
       }
 
       @keyframes in {
@@ -205,6 +320,10 @@
           opacity: 1;
           transform: none;
         }
+
+        .secrets {
+          display: none;
+        }
       }
     </style>
   </head>
@@ -222,10 +341,63 @@
 
       <nav class="links" aria-label="Get in touch">
         <a href="mailto:hello@navidkianfar.com">email</a>
-        <span class="sep" aria-hidden="true">·</span>
+        <span class="sep" aria-hidden="true">/</span>
         <a href="https://github.com/nawwid" rel="noopener noreferrer">github</a>
+        <span class="sep" aria-hidden="true">/</span>
+        <a href="https://www.linkedin.com/in/navidkianfar/" rel="noopener noreferrer">linkedin</a>
       </nav>
     </main>
+
+    <div class="secrets" aria-hidden="true">
+      <button class="spot" type="button" aria-label="31 years old">
+        <span class="spot__hint" aria-hidden="true">·</span>
+        <span class="spot__data">age: 0x1F</span>
+      </button>
+      <button class="spot" type="button" aria-label="Master degree in software engineering">
+        <span class="spot__hint" aria-hidden="true">·</span>
+        <span class="spot__data">edu: MEng · software engineering</span>
+      </button>
+      <button class="spot" type="button" aria-label="Technical team lead at ScalesOps">
+        <span class="spot__hint" aria-hidden="true">·</span>
+        <span class="spot__data">role: tech lead @ scalesops</span>
+      </button>
+      <button class="spot" type="button" aria-label="Based in London">
+        <span class="spot__hint" aria-hidden="true">·</span>
+        <span class="spot__data">based: london, uk</span>
+      </button>
+      <button class="spot" type="button" aria-label="16 plus years of experience">
+        <span class="spot__hint" aria-hidden="true">·</span>
+        <span class="spot__data">exp: 16y+ since '09</span>
+      </button>
+      <button class="spot" type="button" aria-label="DevOps, backend, database">
+        <span class="spot__hint" aria-hidden="true">·</span>
+        <span class="spot__data">devops · backend · database</span>
+      </button>
+      <button class="spot" type="button" aria-label="Kotlin, Java, JavaScript">
+        <span class="spot__hint" aria-hidden="true">·</span>
+        <span class="spot__data">code: kotlin · java · js</span>
+      </button>
+      <button class="spot" type="button" aria-label="Flutter, Android, iOS mobile development">
+        <span class="spot__hint" aria-hidden="true">·</span>
+        <span class="spot__data">mobile: flutter · android · ios</span>
+      </button>
+      <button class="spot" type="button" aria-label="English and Persian">
+        <span class="spot__hint" aria-hidden="true">·</span>
+        <span class="spot__data">speak: english · persian</span>
+      </button>
+      <button class="spot" type="button" aria-label="Shahid Beheshti University">
+        <span class="spot__hint" aria-hidden="true">·</span>
+        <span class="spot__data">uni: shahid beheshti</span>
+      </button>
+      <button class="spot" type="button" aria-label="Web, mobile, and cloud">
+        <span class="spot__hint" aria-hidden="true">·</span>
+        <span class="spot__data">ship: web · mobile · cloud</span>
+      </button>
+      <button class="spot" type="button" aria-label="Team leadership and delivery">
+        <span class="spot__hint" aria-hidden="true">·</span>
+        <span class="spot__data">lead: teams · delivery</span>
+      </button>
+    </div>
 
     <script>
       document.querySelectorAll(".word").forEach((word) => {
@@ -239,6 +411,70 @@
         });
         word.appendChild(frag);
       });
+
+      function placeSpot(spot, placed) {
+        const main = document.querySelector("main");
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+        const margin = Math.max(48, Math.min(vw, vh) * 0.08);
+        const minGap = Math.max(56, Math.min(vw, vh) * 0.09);
+        const mainBox = main.getBoundingClientRect();
+        const pad = 32;
+        const avoid = {
+          left: mainBox.left - pad,
+          right: mainBox.right + pad,
+          top: mainBox.top - pad,
+          bottom: mainBox.bottom + pad,
+        };
+
+        const hitsCenter = (x, y) =>
+          x > avoid.left && x < avoid.right && y > avoid.top && y < avoid.bottom;
+        const tooClose = (x, y) =>
+          placed.some((p) => Math.hypot(p.x - x, p.y - y) < minGap);
+
+        let x = 0;
+        let y = 0;
+        for (let i = 0; i < 80; i++) {
+          x = margin + Math.random() * (vw - margin * 2);
+          y = margin + Math.random() * (vh - margin * 2);
+          if (!hitsCenter(x, y) && !tooClose(x, y)) break;
+        }
+
+        const point = { x, y };
+        placed.push(point);
+        spot.style.setProperty("--x", `${(x / vw) * 100}%`);
+        spot.style.setProperty("--y", `${(y / vh) * 100}%`);
+        return point;
+      }
+
+      function shuffle(list) {
+        const copy = [...list];
+        for (let i = copy.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [copy[i], copy[j]] = [copy[j], copy[i]];
+        }
+        return copy;
+      }
+
+      function revealSecrets() {
+        const spots = shuffle([...document.querySelectorAll(".spot")]);
+        const placed = [];
+        let i = 0;
+
+        const revealNext = () => {
+          if (i >= spots.length) return;
+          placeSpot(spots[i], placed);
+          spots[i].classList.add("is-live");
+          i += 1;
+          setTimeout(revealNext, 750 + Math.random() * 550);
+        };
+
+        setTimeout(revealNext, 1800);
+      }
+
+      if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        revealSecrets();
+      }
     </script>
   </body>
 </html>
